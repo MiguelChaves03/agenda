@@ -1,0 +1,30 @@
+version: '2'
+networks:
+  mired2:
+    ipam:
+      config:
+        - subnet: 182.28.0.0/16
+          gateway: 182.28.0.1
+services:
+  db:
+    image: mongo:latest
+    container_name: agenda-mongo
+    networks:
+      mired2:
+        ipv4_address: 182.28.0.11
+    ports:
+      - "27017:27017"
+    expose:
+      - 27017
+  agenda:
+    image: miguelchaves/agenda:1
+    container_name: agenda-app
+    networks:
+      mired2:
+        ipv4_address: 182.28.0.12
+    expose:
+      - 80
+    ports:
+      - "80:8081"
+    depends_on:
+      - db
